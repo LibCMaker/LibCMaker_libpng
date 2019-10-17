@@ -1,50 +1,49 @@
 # Distributed under the OSI-approved BSD 3-Clause License.  See accompanying
 # file Copyright.txt or https://cmake.org/licensing for details.
 
-#[=======================================================================[.rst:
-FindPNG
--------
-
-Find libpng, the official reference library for the PNG image format.
-
-Imported targets
-^^^^^^^^^^^^^^^^
-
-This module defines the following :prop_tgt:`IMPORTED` target:
-
-``PNG::PNG``
-  The libpng library, if found.
-
-Result variables
-^^^^^^^^^^^^^^^^
-
-This module will set the following variables in your project:
-
-``PNG_INCLUDE_DIRS``
-  where to find png.h, etc.
-``PNG_LIBRARIES``
-  the libraries to link against to use PNG.
-``PNG_DEFINITIONS``
-  You should add_definitions(${PNG_DEFINITIONS}) before compiling code
-  that includes png library files.
-``PNG_FOUND``
-  If false, do not try to use PNG.
-``PNG_VERSION_STRING``
-  the version of the PNG library found (since CMake 2.8.8)
-
-Obsolete variables
-^^^^^^^^^^^^^^^^^^
-
-The following variables may also be set, for backwards compatibility:
-
-``PNG_LIBRARY``
-  where to find the PNG library.
-``PNG_INCLUDE_DIR``
-  where to find the PNG headers (same as PNG_INCLUDE_DIRS)
-
-Since PNG depends on the ZLib compression library, none of the above
-will be defined unless ZLib can be found.
-#]=======================================================================]
+#.rst:
+# FindPNG
+# -------
+#
+# Find libpng, the official reference library for the PNG image format.
+#
+# Imported targets
+# ^^^^^^^^^^^^^^^^
+#
+# This module defines the following :prop_tgt:`IMPORTED` target:
+#
+# ``PNG::PNG``
+#   The libpng library, if found.
+#
+# Result variables
+# ^^^^^^^^^^^^^^^^
+#
+# This module will set the following variables in your project:
+#
+# ``PNG_INCLUDE_DIRS``
+#   where to find png.h, etc.
+# ``PNG_LIBRARIES``
+#   the libraries to link against to use PNG.
+# ``PNG_DEFINITIONS``
+#   You should add_definitions(${PNG_DEFINITIONS}) before compiling code
+#   that includes png library files.
+# ``PNG_FOUND``
+#   If false, do not try to use PNG.
+# ``PNG_VERSION_STRING``
+#   the version of the PNG library found (since CMake 2.8.8)
+#
+# Obsolete variables
+# ^^^^^^^^^^^^^^^^^^
+#
+# The following variables may also be set, for backwards compatibility:
+#
+# ``PNG_LIBRARY``
+#   where to find the PNG library.
+# ``PNG_INCLUDE_DIR``
+#   where to find the PNG headers (same as PNG_INCLUDE_DIRS)
+#
+# Since PNG depends on the ZLib compression library, none of the above
+# will be defined unless ZLib can be found.
 
 if(PNG_FIND_QUIETLY)
   set(_FIND_ZLIB_ARG QUIET)
@@ -52,7 +51,12 @@ endif()
 find_package(ZLIB ${_FIND_ZLIB_ARG})
 
 if(ZLIB_FOUND)
-  find_path(PNG_PNG_INCLUDE_DIR png.h PATH_SUFFIXES include/libpng)
+#  find_path(PNG_PNG_INCLUDE_DIR png.h PATH_SUFFIXES include/libpng)
+  find_path(PNG_PNG_INCLUDE_DIR png.h PATH_SUFFIXES include/libpng
+    NO_CMAKE_ENVIRONMENT_PATH
+    NO_SYSTEM_ENVIRONMENT_PATH
+    NO_CMAKE_SYSTEM_PATH
+  )
 
   list(APPEND PNG_NAMES png libpng)
   unset(PNG_NAMES_DEBUG)
@@ -76,9 +80,20 @@ if(ZLIB_FOUND)
   # For compatibility with versions prior to this multi-config search, honor
   # any PNG_LIBRARY that is already specified and skip the search.
   if(NOT PNG_LIBRARY)
-    find_library(PNG_LIBRARY_RELEASE NAMES ${PNG_NAMES})
-    find_library(PNG_LIBRARY_DEBUG NAMES ${PNG_NAMES_DEBUG})
-    include(${CMAKE_CURRENT_LIST_DIR}/SelectLibraryConfigurations.cmake)
+#    find_library(PNG_LIBRARY_RELEASE NAMES ${PNG_NAMES})
+    find_library(PNG_LIBRARY_RELEASE NAMES ${PNG_NAMES}
+      NO_CMAKE_ENVIRONMENT_PATH
+      NO_SYSTEM_ENVIRONMENT_PATH
+      NO_CMAKE_SYSTEM_PATH
+    )
+#    find_library(PNG_LIBRARY_DEBUG NAMES ${PNG_NAMES_DEBUG})
+    find_library(PNG_LIBRARY_DEBUG NAMES ${PNG_NAMES_DEBUG}
+      NO_CMAKE_ENVIRONMENT_PATH
+      NO_SYSTEM_ENVIRONMENT_PATH
+      NO_CMAKE_SYSTEM_PATH
+    )
+#    include(${CMAKE_CURRENT_LIST_DIR}/SelectLibraryConfigurations.cmake)
+    include(SelectLibraryConfigurations)
     select_library_configurations(PNG)
     mark_as_advanced(PNG_LIBRARY_RELEASE PNG_LIBRARY_DEBUG)
   endif()
@@ -142,7 +157,8 @@ if(ZLIB_FOUND)
   endif ()
 endif()
 
-include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+#include(${CMAKE_CURRENT_LIST_DIR}/FindPackageHandleStandardArgs.cmake)
+include(FindPackageHandleStandardArgs)
 find_package_handle_standard_args(PNG
                                   REQUIRED_VARS PNG_LIBRARY PNG_PNG_INCLUDE_DIR
                                   VERSION_VAR PNG_VERSION_STRING)
