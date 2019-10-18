@@ -23,6 +23,14 @@
 
 # Part of "LibCMaker/cmake/cmr_build_rules.cmake".
 
+  if(NOT LIBCMAKER_ZLIB_SRC_DIR)
+    cmr_print_error(
+      "Please set LIBCMAKER_ZLIB_SRC_DIR with path to LibCMaker_zlib root.")
+  endif()
+  cmr_print_value(LIBCMAKER_ZLIB_SRC_DIR)
+  # To use our FindZLIB.cmake in libpng's CMakeLists.txt
+  list(APPEND CMAKE_MODULE_PATH "${LIBCMAKER_ZLIB_SRC_DIR}/cmake/modules")
+
   # Copy CMake build scripts.
   if(COPY_LIBPNG_CMAKE_BUILD_SCRIPTS)
     cmr_print_status("Copy CMake build scripts to unpacked sources.")

@@ -117,6 +117,9 @@ option(SKIP_INSTALL_EXPORT "SKIP_INSTALL_EXPORT" OFF)
 # Build, install and find the library
 #-----------------------------------------------------------------------
 
+# Used in 'cmr_build_rules_libpng.cmake'.
+set(LIBCMAKER_ZLIB_SRC_DIR ${ZLIB_lib_DIR})
+
 cmr_find_package(
   LibCMaker_DIR   ${LibCMaker_DIR}
   NAME            ${LIBPNG_lib_NAME}

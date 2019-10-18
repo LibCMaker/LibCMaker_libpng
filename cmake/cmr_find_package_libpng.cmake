@@ -30,6 +30,8 @@
 ## +++ Common part of the lib_cmaker_<lib_name> function +++
   set(find_LIB_VARS
     COPY_LIBPNG_CMAKE_BUILD_SCRIPTS
+    LIBCMAKER_ZLIB_SRC_DIR
+
     PNG_BUILD_ZLIB
     PNG_SHARED
     PNG_STATIC
