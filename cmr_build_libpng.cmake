@@ -53,9 +53,15 @@ option(COPY_LIBPNG_CMAKE_BUILD_SCRIPTS "COPY_LIBPNG_CMAKE_BUILD_SCRIPTS" ON)
 option(PNG_BUILD_ZLIB "Custom zlib Location, else find_package is used" OFF)
 
 # COMMAND LINE OPTIONS
-option(PNG_SHARED "Build shared lib" ON)
-option(PNG_STATIC "Build static lib" ON)
+if(BUILD_SHARED_LIBS)
+  option(PNG_SHARED "Build shared lib" ON)
+  option(PNG_STATIC "Build static lib" OFF)
+else()
+  option(PNG_SHARED "Build shared lib" OFF)
+  option(PNG_STATIC "Build static lib" ON)
+endif()
 option(PNG_TESTS  "Build libpng tests" OFF)
+option(PNG_TOOLS  "Build libpng tools" OFF)
 
 # Many more configuration options could be added here
 option(PNG_FRAMEWORK "Build OS X framework" OFF)
