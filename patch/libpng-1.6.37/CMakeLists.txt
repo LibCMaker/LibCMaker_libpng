@@ -54,6 +54,7 @@ endif()
 option(PNG_SHARED "Build shared lib" ON)
 option(PNG_STATIC "Build static lib" ON)
 option(PNG_TESTS  "Build libpng tests" ON)
+option(PNG_TOOLS  "Build libpng tools" ON)
 
 # Many more configuration options could be added here
 option(PNG_FRAMEWORK "Build OS X framework" OFF)
@@ -538,7 +539,7 @@ if(PNG_SHARED)
   endif()
   target_link_libraries(png ${ZLIB_LIBRARY} ${M_LIBRARY})
 
-  if(UNIX AND AWK)
+  if(UNIX AND AWK AND NOT ANDROID)
     if(HAVE_LD_VERSION_SCRIPT)
       set_target_properties(png PROPERTIES LINK_FLAGS
         "-Wl,--version-script='${CMAKE_CURRENT_BINARY_DIR}/libpng.vers'")
@@ -747,7 +748,7 @@ if(PNG_TESTS AND PNG_SHARED)
   png_add_test(NAME pngimage-full COMMAND pngimage OPTIONS --exhaustive --list-combos --log FILES ${PNGSUITE_PNGS})
 endif()
 
-if(PNG_SHARED)
+if(PNG_SHARED AND PNG_TOOLS)
   add_executable(pngfix ${pngfix_sources})
   target_link_libraries(pngfix png)
   set(PNG_BIN_TARGETS pngfix)
