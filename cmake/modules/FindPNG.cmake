@@ -50,6 +50,10 @@ if(PNG_FIND_QUIETLY)
 endif()
 find_package(ZLIB ${_FIND_ZLIB_ARG})
 
+if(UNIX AND NOT APPLE AND NOT BEOS AND NOT HAIKU)
+  find_library(M_LIBRARY m)
+endif()
+
 if(ZLIB_FOUND)
 #  find_path(PNG_PNG_INCLUDE_DIR png.h PATH_SUFFIXES include/libpng)
   find_path(PNG_PNG_INCLUDE_DIR png.h PATH_SUFFIXES include/libpng
@@ -108,7 +112,7 @@ if(ZLIB_FOUND)
       # png.h includes zlib.h. Sigh.
       set(PNG_INCLUDE_DIRS ${PNG_PNG_INCLUDE_DIR} ${ZLIB_INCLUDE_DIR} )
       set(PNG_INCLUDE_DIR ${PNG_INCLUDE_DIRS} ) # for backward compatibility
-      set(PNG_LIBRARIES ${PNG_LIBRARY} ${ZLIB_LIBRARY})
+      set(PNG_LIBRARIES ${PNG_LIBRARY} ${ZLIB_LIBRARY} ${M_LIBRARY})
 
       if (CYGWIN)
         if(BUILD_SHARED_LIBS)
@@ -120,11 +124,13 @@ if(ZLIB_FOUND)
       endif ()
 
       if(NOT TARGET PNG::PNG)
+        set(PNG_INTERFACE_LINK_LIBRARIES ZLIB::ZLIB "${M_LIBRARY}")
         add_library(PNG::PNG UNKNOWN IMPORTED)
         set_target_properties(PNG::PNG PROPERTIES
           INTERFACE_COMPILE_DEFINITIONS "${_PNG_COMPILE_DEFINITIONS}"
-          INTERFACE_INCLUDE_DIRECTORIES "${PNG_INCLUDE_DIRS}"
-          INTERFACE_LINK_LIBRARIES ZLIB::ZLIB)
+          INTERFACE_INCLUDE_DIRECTORIES "${PNG_INCLUDE_DIRS}")
+        set_property(TARGET PNG::PNG APPEND PROPERTY
+          INTERFACE_LINK_LIBRARIES ZLIB::ZLIB "${M_LIBRARY}")
         if(EXISTS "${PNG_LIBRARY}")
           set_target_properties(PNG::PNG PROPERTIES
             IMPORTED_LINK_INTERFACE_LANGUAGES "C"
