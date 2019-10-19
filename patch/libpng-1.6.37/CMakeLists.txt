@@ -22,7 +22,6 @@ cmake_minimum_required(VERSION 3.1)
 cmake_policy(VERSION 3.1)
 
 project(libpng C ASM)
-enable_testing()
 
 set(PNGLIB_MAJOR 1)
 set(PNGLIB_MINOR 6)
@@ -629,6 +628,8 @@ function(png_add_test)
 endfunction()
 
 if(PNG_TESTS AND PNG_SHARED)
+  enable_testing()
+
   # Find test PNG files by globbing, but sort lists to ensure
   # consistency between different filesystems.
   file(GLOB PNGSUITE_PNGS "${CMAKE_CURRENT_SOURCE_DIR}/contrib/pngsuite/*.png")
