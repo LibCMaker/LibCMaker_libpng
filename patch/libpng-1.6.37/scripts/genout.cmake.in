@@ -25,11 +25,21 @@ set(ZLIBINCDIR "@ZLIB_INCLUDE_DIR@")
 set(PLATFORM_C_FLAGS)
 if(APPLE)
   set(CMAKE_OSX_ARCHITECTURES "@CMAKE_OSX_ARCHITECTURES@")
+  set(CMAKE_OSX_SYSROOT_INT "@CMAKE_OSX_SYSROOT_INT@")
   set(CMAKE_OSX_SYSROOT "@CMAKE_OSX_SYSROOT@")
+
   if(CMAKE_OSX_ARCHITECTURES)
     set(PLATFORM_C_FLAGS ${PLATFORM_C_FLAGS} -arch ${CMAKE_OSX_ARCHITECTURES})
   endif()
-  if(CMAKE_OSX_SYSROOT)
+
+  # CMAKE_OSX_SYSROOT specifies the location or **name**
+  # of the macOS platform SDK to be used.
+  # CMAKE_OSX_SYSROOT_INT is from ios.toolchain.cmake in LibCMaker.
+  string(COMPARE NOTEQUAL "${CMAKE_OSX_SYSROOT_INT}" "" have_osx_sysroot_int)
+  string(COMPARE NOTEQUAL "${CMAKE_OSX_SYSROOT}" "" have_osx_sysroot)
+  if(have_osx_sysroot_int)
+    set(PLATFORM_C_FLAGS ${PLATFORM_C_FLAGS} -isysroot ${CMAKE_OSX_SYSROOT_INT})
+  elseif(have_osx_sysroot)
     set(PLATFORM_C_FLAGS ${PLATFORM_C_FLAGS} -isysroot ${CMAKE_OSX_SYSROOT})
   endif()
 endif()
