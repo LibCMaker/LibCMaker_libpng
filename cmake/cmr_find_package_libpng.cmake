@@ -74,7 +74,7 @@
     LibCMaker_DIR ${find_LibCMaker_DIR}
     NAME          ${find_NAME}
     VERSION       ${find_VERSION}
-    LANGUAGES     C
+    LANGUAGES     C ASM
     BASE_DIR      ${find_LIB_DIR}
     DOWNLOAD_DIR  ${cmr_DOWNLOAD_DIR}
     UNPACKED_DIR  ${cmr_UNPACKED_DIR}
