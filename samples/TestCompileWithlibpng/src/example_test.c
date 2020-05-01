@@ -196,7 +196,11 @@ int maintest(void)
 
     /* Write the image to a file 'fruit.png'. */
 
+#if defined(__ANDROID__)
+    if (save_png_to_file (& fruit, "/mnt/sdcard/fruit.png")) {
+#else
     if (save_png_to_file (& fruit, "fruit.png")) {
+#endif
   fprintf (stderr, "Error writing file.\n");
   status = -1;
     }
