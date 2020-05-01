@@ -86,9 +86,13 @@ if(BUILD_TESTING)
     add_test(NAME chmod_${test_NAME}
       COMMAND ${adb_exec} shell chmod 775 "${TEST_WORK_DIR}/${test_NAME}"
     )
+    add_test(NAME cd_to_work_dir COMMAND ${adb_exec} shell
+      cd "${TEST_WORK_DIR}"
+    )
     add_test(NAME ${test_NAME} COMMAND ${adb_exec} shell
-      "LD_LIBRARY_PATH=${TEST_WORK_DIR}/lib"  # :${LD_LIBRARY_PATH} || :/vendor/lib64:/system/lib64
-      "${TEST_WORK_DIR}/${test_NAME}"
+      "cd ${TEST_WORK_DIR} && "
+      "LD_LIBRARY_PATH=${TEST_WORK_DIR}/lib ${TEST_WORK_DIR}/${test_NAME}"
+      # :${LD_LIBRARY_PATH} || :/vendor/lib64:/system/lib64
     )
     set_tests_properties(${test_NAME} PROPERTIES
       PASS_REGULAR_EXPRESSION "PASSED"
