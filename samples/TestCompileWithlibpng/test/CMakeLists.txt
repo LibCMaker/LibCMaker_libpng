@@ -62,8 +62,25 @@ if(BUILD_TESTING)
     )
 
     if(BUILD_SHARED_LIBS)
-      add_test(NAME push_libs
-        COMMAND ${adb_exec} push "${cmr_INSTALL_DIR}/lib" "${TEST_WORK_DIR}/lib"
+      # Fix for the adb error on the arm devices if use the adb push
+      # for the directory with the soft symlinks:
+      # adb: error: failed to copy '<soft symlink>' to '/data/local/tmp/<soft symlink>': remote symlink failed: Permission denied
+      # Instead of the direct using of the adb push use tar.
+      execute_process(
+        COMMAND ${CMAKE_COMMAND} -E tar cf
+          "${CMAKE_CURRENT_BINARY_DIR}/lib.tar"
+          "${cmr_INSTALL_DIR}/lib"
+        WORKING_DIRECTORY "${cmr_INSTALL_DIR}"
+      )
+      add_test(NAME push_libs_tar
+        COMMAND ${adb_exec} push
+          "${CMAKE_CURRENT_BINARY_DIR}/lib.tar"
+          "${TEST_WORK_DIR}/lib.tar"
+      )
+      add_test(NAME extract_libs_tar
+        COMMAND ${adb_exec} shell tar --no-same-owner
+          -xf "${TEST_WORK_DIR}/lib.tar"
+          -C "${TEST_WORK_DIR}"
       )
 
       find_library(cpp_shared_LIB "c++_shared")
