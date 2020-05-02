@@ -765,6 +765,7 @@ endif()
 include(CMakeParseArguments)
 
 function(create_symlink DEST_FILE)
+
   cmake_parse_arguments(S "" "FILE;TARGET" "" ${ARGN})
 
   if(NOT S_TARGET AND NOT S_FILE)
@@ -778,7 +779,7 @@ function(create_symlink DEST_FILE)
   if(S_FILE)
     # If we don't need to symlink something that's coming from a build target,
     # we can go ahead and symlink/copy at configure time.
-    if(CMAKE_HOST_WIN32 AND NOT CYGWIN OR ANDROID)
+    if(CMAKE_HOST_WIN32 AND NOT CYGWIN)
       execute_process(
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different ${S_FILE} ${DEST_FILE}
         WORKING_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
@@ -793,7 +794,7 @@ function(create_symlink DEST_FILE)
     # We need to use generator expressions, which can be a bit tricky, so for
     # simplicity make the symlink a POST_BUILD step and use the TARGET
     # signature of add_custom_command.
-    if(CMAKE_HOST_WIN32 AND NOT CYGWIN OR ANDROID)
+    if(CMAKE_HOST_WIN32 AND NOT CYGWIN)
       add_custom_command(TARGET ${S_TARGET} POST_BUILD
         COMMAND "${CMAKE_COMMAND}" -E copy_if_different $<TARGET_LINKER_FILE_NAME:${S_TARGET}> $<TARGET_LINKER_FILE_DIR:${S_TARGET}>/${DEST_FILE})
     else()
