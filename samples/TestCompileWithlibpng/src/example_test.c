@@ -227,12 +227,13 @@ int maintest(void)
         // Concatenating the path string returned from HOME.
         strcat(buffer,"/Documents/fruit.png");
 
-    if (save_png_to_file (& fruit, buffer)) {
+      if (save_png_to_file (& fruit, buffer)) {
 
     #elif TARGET_OS_IPHONE
         // iOS device
     #elif TARGET_OS_MAC
         // Other kinds of Mac OS
+      if (save_png_to_file (& fruit, "fruit.png")) {
     #else
     #   error "Unknown Apple platform"
     #endif
