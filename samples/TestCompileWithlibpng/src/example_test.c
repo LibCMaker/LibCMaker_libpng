@@ -32,6 +32,21 @@
 #include <stdlib.h>
 #include <stdint.h>
 
+// https://stackoverflow.com/a/5920028
+#if __APPLE__
+    #include <string.h>
+    #include <TargetConditionals.h>
+    #if TARGET_IPHONE_SIMULATOR
+         // iOS Simulator
+    #elif TARGET_OS_IPHONE
+        // iOS device
+    #elif TARGET_OS_MAC
+        // Other kinds of Mac OS
+    #else
+    #   error "Unknown Apple platform"
+    #endif
+#endif
+
 /* A coloured pixel. */
 
 typedef struct
@@ -196,7 +211,35 @@ int maintest(void)
 
     /* Write the image to a file 'fruit.png'. */
 
+// https://stackoverflow.com/a/5920028
+#if __APPLE__
+    //#include <TargetConditionals.h>
+    #if TARGET_IPHONE_SIMULATOR
+        // iOS Simulator
+
+        // https://stackoverflow.com/a/39022407
+        char buffer[256];
+
+        // HOME is the home directory of your application
+        // points to the root of your sandbox.
+        strcpy(buffer,getenv("HOME"));
+
+        // Concatenating the path string returned from HOME.
+        strcat(buffer,"/Documents/fruit.png");
+
+    if (save_png_to_file (& fruit, buffer)) {
+
+    #elif TARGET_OS_IPHONE
+        // iOS device
+    #elif TARGET_OS_MAC
+        // Other kinds of Mac OS
+    #else
+    #   error "Unknown Apple platform"
+    #endif
+
+#else  // NOT __APPLE__
     if (save_png_to_file (& fruit, "fruit.png")) {
+#endif  // __APPLE__
   fprintf (stderr, "Error writing file.\n");
   status = -1;
     }
