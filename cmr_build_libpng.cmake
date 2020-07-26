@@ -29,9 +29,9 @@
 # Lib's name, version, paths
 #-----------------------------------------------------------------------
 
-set(LIBPNG_lib_NAME      "libpng")
-set(LIBPNG_lib_VERSION   "1.6.37")
-set(LIBPNG_lib_DIR       "${CMAKE_CURRENT_LIST_DIR}")
+set(LIBPNG_lib_NAME "libpng")
+set(LIBPNG_lib_VERSION "1.6.37" CACHE STRING "LIBPNG_lib_VERSION")
+set(LIBPNG_lib_DIR "${CMAKE_CURRENT_LIST_DIR}" CACHE PATH "LIBPNG_lib_DIR")
 
 # To use our Find<LibName>.cmake.
 list(APPEND CMAKE_MODULE_PATH "${LIBPNG_lib_DIR}/cmake/modules")
@@ -118,7 +118,7 @@ option(SKIP_INSTALL_EXPORT "SKIP_INSTALL_EXPORT" OFF)
 #-----------------------------------------------------------------------
 
 # Used in 'cmr_build_rules_libpng.cmake'.
-set(LIBCMAKER_ZLIB_SRC_DIR ${ZLIB_lib_DIR})
+set(LIBCMAKER_ZLIB_SRC_DIR ${ZLIB_lib_DIR} CACHE PATH "LIBCMAKER_ZLIB_SRC_DIR")
 
 cmr_find_package(
   LibCMaker_DIR   ${LibCMaker_DIR}
